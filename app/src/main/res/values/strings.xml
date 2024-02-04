@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">ToDo</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="buy_food_text">Buy Food</string>
+    <string name="edit_todo_text">Edit Todo</string>
+    <string name="_icon_back_arrow">GoBackArrow</string>
+    <string name="title_text">Title</string>
+    <string name="h1_editTodo">Edit Todo</string>
+    <string name="go_back_arrow">go back</string>
+    <string name="description_title">Description</string>
+    <string name="status_text">Status</string>
+    <string name="done_text">Done</string>
+    <string name="cancel_button">cancel</string>
+    <string name="button_done_text">Done</string>
+
+</resources>

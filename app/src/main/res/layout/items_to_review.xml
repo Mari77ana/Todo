@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp"
+    android:orientation="horizontal">
+    
+    <CheckBox
+        android:id="@+id/check_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </CheckBox>
+
+    <TextView
+        android:id="@+id/todo_text"
+        android:text="@string/buy_food_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+    </TextView>
+
+    <ImageButton
+        android:id="@+id/deleteTrash"
+        android:layout_width="13dp"
+        android:layout_height="14dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/baseline_delete_24">
+    </ImageButton>
+
+</LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+

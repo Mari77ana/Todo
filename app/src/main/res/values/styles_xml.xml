@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <style  name="Theme.task"  parent= "Theme.Material3.Light"></style>
+
+
+    <!-- backgroundTint is default in android studio -->
+    <style name="MyApp.Widget.RoundWhiteButton" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@null</item>
+        <item name="android:background">@drawable/button_cancel</item>
+    </style>
+
+</resources>
