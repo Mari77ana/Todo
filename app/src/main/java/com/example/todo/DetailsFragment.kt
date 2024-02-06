@@ -39,7 +39,7 @@ class DetailsFragment : Fragment() {
             parentFragmentManager.popBackStack()
         }
 
-        // sends taskText to textInput
+        // sends taskText to textInput,   (sending data between Fragments)
         val task = arguments?.getString("task")
         if(task != null){
             binding.titleInput.setText(task)
@@ -54,6 +54,9 @@ class DetailsFragment : Fragment() {
            taskJournal = TaskJournal(taskTitle, taskDescription, taskIsChecked)
             viewModel.saveTaskJournal(taskJournal)
         }
+
+
+
 
 
         return view

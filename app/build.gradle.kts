@@ -3,16 +3,9 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-   // id("kotlin-kapt") // add kapt for room
-    //kotlin("ksp") version "1.9.22"
-    id("com.google.devtools.ksp")version "1.8.10-1.0.9"
-    //id("kotlin-ksp")
-    //id("com.google.devtools.ksp")
-
-
+    id("com.google.devtools.ksp")
 
 }
-
 
 
 android {
@@ -58,7 +51,8 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.5.3"
+       // "1.4.3" var det innan
     }
     packaging {
         resources {
@@ -67,26 +61,37 @@ android {
     }
 }
 
-
-// Lägg till buildscript-blocket här
-
-
-
-
-
-
+/*------la till denna
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath ("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0")
+        classpath ("androidx.room:room-compiler:2.6.1")
+    }
+}
+*/
 
 
 dependencies {
-     // Need for Room
-    implementation("androidx.room:room-runtime:2.6.1")
-    annotationProcessor("androidx.room:room-compiler:2.6.1")
-   // ksp("androidx.room:room-compiler:2.6.1")
+
+    // Den nya dependencies för Room
+    val room_version = "2.6.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
 
 
 
 
 
+     // Need for Room,  som jag hade innan
+   // implementation("androidx.room:room-runtime:2.6.1")
+   // annotationProcessor("androidx.room:room-compiler:2.6.1")
 
 
     // Needed for the Toolbar, hade redan denna

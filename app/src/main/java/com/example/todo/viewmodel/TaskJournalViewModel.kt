@@ -25,6 +25,15 @@ class TaskJournalViewModel(context: Context): ViewModel() {
             taskJournalRepository.insertTaskJournal(taskJournal)
         }
 
+    }
+
+    fun getTasks(taskJournal: TaskJournal){
+        viewModelScope.launch {
+            taskJournalRepository.getAllTaskJournals()
+        }
 
     }
+
+
+
 }

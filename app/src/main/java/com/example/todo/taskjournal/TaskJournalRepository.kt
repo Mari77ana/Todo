@@ -8,11 +8,26 @@ import com.example.todo.database.TaskJournalDatabase
 
 class TaskJournalRepository(private val taskJournalDatabase: TaskJournalDatabase) {
 
-     // Here we adding taskJournal to insertTaskJournal() to connect to with TaskJournalDao
+     // Here we adding taskJournal to insertTaskJournal() to connect with TaskJournalDao
     suspend fun insertTaskJournal(taskJournal: TaskJournal){
         taskJournalDatabase.taskJournalDao().insertTaskJournal(taskJournal)
 
     }
+
+    suspend fun getAllTaskJournals(): List<TaskJournal> {
+       return  taskJournalDatabase.taskJournalDao().getAllTaskJournal()
+
+    }
+
+
+
+
+
+
+
+
+
+
 
     // for deleting
     suspend fun deleteTaskJournal(taskJournal: TaskJournal){
