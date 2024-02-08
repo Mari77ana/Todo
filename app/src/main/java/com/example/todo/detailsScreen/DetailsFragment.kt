@@ -1,26 +1,33 @@
-package com.example.todo
+package com.example.todo.detailsScreen
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.todo.databinding.FragmentDetailsBinding
-import com.example.todo.taskjournal.TaskJournal
-import com.example.todo.viewmodel.TaskJournalViewModel
+import com.example.todo.database.dataClass.TaskJournal
+import com.example.todo.uistateData.UiState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
+
+// DetailsFragment ->
+// Här skrivs in ny title, description och checkBox och sparas i funktionen saveTaskJournal som finns i DetailsViewModel
 
 class DetailsFragment : Fragment() {
     private lateinit var binding: FragmentDetailsBinding
-    private lateinit var viewModel:TaskJournalViewModel
+    private lateinit var viewModel:DetailsViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = TaskJournalViewModel(requireContext())
+        viewModel = DetailsViewModel(requireContext())
 
     }
-
 
 
     override fun onCreateView(
@@ -31,7 +38,9 @@ class DetailsFragment : Fragment() {
         binding = FragmentDetailsBinding.inflate(layoutInflater, container, false)
         val view = binding.root
 
-        var taskJournal:TaskJournal
+        var taskJournal: TaskJournal
+
+
 
 
 
@@ -47,13 +56,24 @@ class DetailsFragment : Fragment() {
 
         // Add taskJournal when button is clicked
         binding.buttonSaveTaskJournal.setOnClickListener {
-            val taskTitle = binding.titleInput.toString()
+            val taskTitle = binding.titleInput.text.toString()
             val taskDescription = binding.descriptionInput.text.toString()
             val taskIsChecked = binding.checkBoxDone.isChecked
 
            taskJournal = TaskJournal(taskTitle, taskDescription, taskIsChecked)
             viewModel.saveTaskJournal(taskJournal)
+
+
         }
+
+         viewLifecycleOwner.lifecycleScope.launch {
+             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                 viewModel.saveTaskJournal(TaskJournal())
+             }
+         }
+
+
+
 
 
 

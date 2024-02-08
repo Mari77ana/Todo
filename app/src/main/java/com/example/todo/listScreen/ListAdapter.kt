@@ -1,26 +1,21 @@
-package com.example.todo
+package com.example.todo.listScreen
 
 import android.view.LayoutInflater
-import android.view.View
-import android.view.View.OnClickListener
 import android.view.ViewGroup
-import android.widget.AdapterView.OnItemClickListener
-import android.widget.TextView
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.todo.data.Task
+import com.example.todo.uistateData.Task
 import com.example.todo.databinding.ItemsToReviewBinding
-import com.example.todo.viewmodel.TaskViewModel
 
 
-class TaskAdapter(
-    private val todos: MutableList<Task> = mutableListOf(),
+class ListAdapter(
+    //private val todos: MutableList<Task> = mutableListOf(),
     // pass lambda to use clickListener
     private val onRemoveClicked: (Task) -> Unit,  // titta på den , item click namn ge den
     private val onCheckBoxChanged: (Task, Boolean) -> Unit,
     private val onItemClickListener:  (Task) -> Unit // ge ett argument i FirstFragment
 ) :
-    RecyclerView.Adapter<TaskAdapter.MyViewHolder>() {
+    androidx.recyclerview.widget.ListAdapter<Task, ListAdapter.MyViewHolder>(TaskDiffCallback) {
 
     // ViewHolder -> Define components in view
     inner class MyViewHolder(private val binding: ItemsToReviewBinding) :
@@ -54,26 +49,33 @@ class TaskAdapter(
 
     // Creates Layout Content for each item in recycle,
     // ansvarar för att skapa och returnera en ny ViewHolder-instance
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskAdapter.MyViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
 
         val view = ItemsToReviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(view)
 
     }
 
-    override fun onBindViewHolder(holder: TaskAdapter.MyViewHolder, position: Int) {
-        holder.bind(todos[position])
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        holder.bind(getItem(position))
     }
-
-    override fun getItemCount(): Int {
-        return todos.size
-    }
-
 
     fun updateData(list: List<Task>) {
-        todos.clear()
-        todos.addAll(list)
-        notifyDataSetChanged() // function refer to Adapter, use when data changes in Ui (RecycleView)
+        submitList(list)
 
     }
+}
+
+object TaskDiffCallback: DiffUtil.ItemCallback<Task>() {
+    override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
+
+        return oldItem == newItem // compair the "object" to check if there is same items in the list
+    }
+
+    override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
+        // if the content is the same  content just the id:s, dosen't matter if the content has changed
+        return oldItem.id  == newItem.id
+
+    }
+
 }

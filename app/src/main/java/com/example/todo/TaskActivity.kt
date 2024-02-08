@@ -3,8 +3,10 @@ package com.example.todo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.commit
-import com.example.todo.data.Task
+import com.example.todo.uistateData.Task
 import com.example.todo.databinding.ActivityTaskBinding
+import com.example.todo.detailsScreen.DetailsFragment
+import com.example.todo.listScreen.ListFragment
 
 class TaskActivity : AppCompatActivity() {
 
@@ -21,19 +23,17 @@ class TaskActivity : AppCompatActivity() {
 
         // starts the transaction for FirstFragment, use replace to find Id for fragmentContainer
         // use add() if adding another fragment
-        val firstFragment = FirstFragment()
+        val firstFragment = ListFragment()
         supportFragmentManager.commit {
             replace(R.id.fragmentContainerView, firstFragment)
         }
-
-
 
     }
 
     // trying to send data task to show up in DetailsFragment
     fun showDetails(task: Task){
         val bundle = Bundle() // use bundle to pass data between fragments
-        bundle.putString( "task", task.todoText) // putserilizable()
+        bundle.putLong( "id", task.id)
         val detailsFragment = DetailsFragment()
         // denna måste med
         detailsFragment.arguments = bundle

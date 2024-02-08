@@ -1,11 +1,12 @@
-package com.example.todo.taskjournal
+package com.example.todo.database
 
-import androidx.compose.ui.input.pointer.PointerId
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.todo.taskjournal.TaskJournal
+import com.example.todo.database.dataClass.TaskJournal
+import kotlinx.coroutines.flow.Flow
+
 
 // Data Access Object -> Dao
 // For synchronised -> suspend
@@ -22,9 +23,18 @@ interface TaskJournalDao {
     suspend fun deleteTaskJournal(taskJournal: TaskJournal)
 
 
+
+     // check Flow
     // Get task from TaskJournal   (to use for showing in FirstFragment use a List of TaskJournal)
     @Query("SELECT * FROM task_journal ")
-    suspend fun getAllTaskJournal(): List<TaskJournal> // return a List to save all tasks in it
+    fun observeAllTaskJournal(): Flow<List<TaskJournal>> // return a List to save all tasks in it
+
+
+    // Get id from TaskJournal
+    @Query("SELECT * FROM task_journal WHERE id = :taskId")
+    fun getTaskJournalById(taskId: Long): Flow<List<TaskJournal>>
+
+
 
 
 

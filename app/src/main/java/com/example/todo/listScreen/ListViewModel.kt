@@ -1,48 +1,51 @@
-package com.example.todo.viewmodel
+package com.example.todo.listScreen
 
-import android.util.Log
-import android.widget.CheckBox
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.commit
+import android.content.Context
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
-import com.example.todo.DetailsFragment
-import com.example.todo.R
-import com.example.todo.data.Task
-import com.example.todo.data.UiState
+import androidx.lifecycle.viewModelScope
+import com.example.todo.uistateData.Task
+import com.example.todo.uistateData.UiState
+import com.example.todo.database.dataClass.TaskJournal
+import com.example.todo.database.TaskJournalRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class TaskViewModel : ViewModel() {
+class ListViewModel (context: Context): ViewModel() {
+    private val taskJournalRepository = TaskJournalRepository.getInstance(context)
 
     private val _uistate =
         MutableStateFlow(UiState(listOf())) // from inside the adapter, always private
     val uiState = _uistate.asStateFlow() // from outside ui
 
+
+    // First call when the viewModel is instantiate, the first thing we see on screen -> init
     init {
-        // First call when the viewModel is instantiate, the first thing we see on screen -> init
+        // Denna hämtar alla taskJournal från databasen med map taskJournal sätts in i Task
+        taskJournalRepository.observeAllTaskJournals().onEach {
 
-        val myTask = mutableListOf<Task>()
-        myTask.add(Task(0, "Buy Food", false))
-        myTask.add(Task(1, "Complete next Academy task", false))
-        myTask.add(Task(2, "Get some sleep", false))
-        myTask.add(Task(3, "Read instructions", false))
+            // Observerar och uppdaterar uiState
+            _uistate.update { currentTaskState ->
+                currentTaskState.copy(
+                    tasks = currentTaskState.tasks.toMutableList().apply {
+                        addAll(it.map { taskJournal: TaskJournal ->
+                            Task(taskJournal.id?:0, taskJournal.title, taskJournal.status)}) // pass myTask mutableListOf
+
+                    }
+
+                )
+
+            }
+
+        }.launchIn(viewModelScope)
 
 
-        // updates task to mutableList
-        _uistate.update { currentTaskState ->
-            currentTaskState.copy(
-                tasks = currentTaskState.tasks.toMutableList().apply {
-                    addAll(myTask) // pass myTask mutableListOf
+    }// init ends
 
-                }
 
-            )
-
-        }
-
-    }
 
     // update tasks newList  with uiState, using when changing later to addItem or removeItem
     fun upDateTaskItemState(list: List<Task>) {
@@ -52,12 +55,25 @@ class TaskViewModel : ViewModel() {
 
     }
 
+
+    // add Task , add data in database,
     fun addItem(item: Task) {
+          // inserts the task from user / not hard coded
+        viewModelScope.launch {
+         taskJournalRepository.insertTaskJournal(TaskJournal(item.todoText, "", false))
+        }
+
+        //
+        /*
         _uistate.value = UiState(mutableListOf<Task>().apply {
             addAll(_uistate.value.tasks)
             add(item)
         })
+
+         */
     }
+
+
 
     fun deleteItem(item: Task) {
         val updateList =
@@ -82,18 +98,12 @@ class TaskViewModel : ViewModel() {
     }
 
 
-    fun checkedBoxToBottom() {
-        // todo check checkedTask
-        // använd id
 
-        // todo , Do I have to check uncheckedTasks ?
+
+    fun checkedBoxToBottom() {
+
         // uncheckedTasks
         val uncheckedTasks = _uistate.value.tasks.sortedBy { !it.isChecked }
-
-        //todo update list
-        //val updateList = mutableListOf<Task>()^
-
-        //upDateTaskItemState(uncheckedTasks)
 
     }
 

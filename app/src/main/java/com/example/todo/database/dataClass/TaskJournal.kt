@@ -1,12 +1,13 @@
-package com.example.todo.taskjournal
+package com.example.todo.database.dataClass
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 // Room setup
 
-// Entity pushes to database / (Primary constructor)
+// Entity pushes to database /
 @Entity(tableName = "task_journal")
+//(Primary constructor)
 data class TaskJournal (
     val title: String,
     val description: String,
