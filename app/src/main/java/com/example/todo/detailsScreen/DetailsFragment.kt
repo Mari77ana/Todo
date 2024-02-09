@@ -10,8 +10,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.todo.databinding.FragmentDetailsBinding
 import com.example.todo.database.dataClass.TaskJournal
-import com.example.todo.uistateData.UiState
+import com.example.todo.uistateData.Task
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 
@@ -20,7 +22,7 @@ import kotlinx.coroutines.launch
 
 class DetailsFragment : Fragment() {
     private lateinit var binding: FragmentDetailsBinding
-    private lateinit var viewModel:DetailsViewModel
+    private lateinit var viewModel: DetailsViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,35 +44,57 @@ class DetailsFragment : Fragment() {
 
 
 
-
-
         binding.myToolbar.setNavigationOnClickListener {
             parentFragmentManager.popBackStack()
         }
 
-        // sends taskText to textInput,   (sending data between Fragments)
-        val task = arguments?.getString("task")
-        if(task != null){
-            binding.titleInput.setText(task)
+        val id = arguments?.getLong("id")
+        if (id != null) {
+            viewModel.setTaskId(id)
         }
 
-        // Add taskJournal when button is clicked
+        // Observera UI State och uppdaterar EditText när det finns uppgiftsdata
+        viewLifecycleOwner.lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { uiState ->
+                    val task = uiState.task
+
+                    if (task != null) {
+                        binding.titleInput.setText(task.todoText)
+                    }
+                }
+            }
+        }
+
+
+        // Add taskJournal when button Done is clicked
         binding.buttonSaveTaskJournal.setOnClickListener {
             val taskTitle = binding.titleInput.text.toString()
             val taskDescription = binding.descriptionInput.text.toString()
             val taskIsChecked = binding.checkBoxDone.isChecked
 
-           taskJournal = TaskJournal(taskTitle, taskDescription, taskIsChecked)
-            viewModel.saveTaskJournal(taskJournal)
+            viewLifecycleOwner.lifecycleScope.launch {
+                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.saveTaskJournal(
+                        TaskJournal(
+                            taskTitle,
+                            taskDescription,
+                            taskIsChecked
+                        )
+                    )
 
 
+                }
+            }
         }
 
-         viewLifecycleOwner.lifecycleScope.launch {
-             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                 viewModel.saveTaskJournal(TaskJournal())
-             }
-         }
+
+        // Button Cancel
+        binding.buttonCancel.setOnClickListener {
+            // återställ textfienden
+            binding.titleInput.setText("")
+        }
+
 
 
 
@@ -81,7 +105,4 @@ class DetailsFragment : Fragment() {
 
         return view
     }
-
-
-
 }

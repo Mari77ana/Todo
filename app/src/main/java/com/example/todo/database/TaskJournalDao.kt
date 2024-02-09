@@ -27,12 +27,16 @@ interface TaskJournalDao {
      // check Flow
     // Get task from TaskJournal   (to use for showing in FirstFragment use a List of TaskJournal)
     @Query("SELECT * FROM task_journal ")
-    fun observeAllTaskJournal(): Flow<List<TaskJournal>> // return a List to save all tasks in it
+    fun observeAllTaskJournal(): Flow<List<TaskJournal>> // return a List to save all tasks
 
 
     // Get id from TaskJournal
     @Query("SELECT * FROM task_journal WHERE id = :taskId")
     fun getTaskJournalById(taskId: Long): Flow<List<TaskJournal>>
+
+
+    // Gör en update query
+
 
 
 

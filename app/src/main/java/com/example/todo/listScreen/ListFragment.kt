@@ -9,6 +9,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.R
+import androidx.navigation.fragment.R.*
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.TaskActivity
@@ -20,7 +21,7 @@ import kotlinx.coroutines.launch
 
 class ListFragment : Fragment() {
     private lateinit var binding: FragmentFirstBinding
-    private lateinit var  viewModel: ListViewModel
+    private lateinit var viewModel: ListViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,20 +55,10 @@ class ListFragment : Fragment() {
             //  navigate to write a new TaskJournal
             val bundle = Bundle()
             val detailsFragment = DetailsFragment()
-            val writeNewTask = true
 
-            if(writeNewTask){
-                detailsFragment.arguments = bundle
-                val transaction = parentFragmentManager.beginTransaction()
-                transaction.addToBackStack("Details")
-                transaction.replace(R.id.)
-            }
-            else{
+            val activity = requireActivity() as TaskActivity // för att fragmentContainer ligger på activityn
 
-            }
-
-
-
+            activity.showDetails(null)
         }
 
         // Listener when call state to show in view then stop, updates the view
@@ -78,10 +69,6 @@ class ListFragment : Fragment() {
                 }
             }
         }
-
-
-
-
 
 
         val recycleView: RecyclerView = binding.recyclerView

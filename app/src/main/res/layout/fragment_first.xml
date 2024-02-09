@@ -1,43 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/list_fragment_root"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".listScreen.ListFragment">
-
-    <!-- TODO: RecycleView layout -->
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:orientation="vertical"
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </androidx.recyclerview.widget.RecyclerView>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_add_task"
-            android:clickable="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            android:minHeight="48dp"
+            android:clickable="true"
             android:maxHeight="48dp"
-            app:fabSize="mini"
-            android:tint="@color/light_green"
+            android:minHeight="48dp"
             android:src="@drawable/baseline_add_circle_24"
-            android:layout_gravity="bottom|end">
-        </com.google.android.material.floatingactionbutton.FloatingActionButton>
-
-
-
-
+            android:tint="@color/light_green"
+            app:fabSize="mini"></com.google.android.material.floatingactionbutton.FloatingActionButton>
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

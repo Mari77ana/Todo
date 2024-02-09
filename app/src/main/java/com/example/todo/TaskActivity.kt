@@ -2,6 +2,7 @@ package com.example.todo
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.example.todo.uistateData.Task
 import com.example.todo.databinding.ActivityTaskBinding
@@ -30,17 +31,17 @@ class TaskActivity : AppCompatActivity() {
 
     }
 
-    // trying to send data task to show up in DetailsFragment
-    fun showDetails(task: Task){
+    // send data task to show up in DetailsFragment
+    fun showDetails(task: Task?) {
         val bundle = Bundle() // use bundle to pass data between fragments
-        bundle.putLong( "id", task.id)
+        task?.let { bundle.putLong("id", it.id) }
+
         val detailsFragment = DetailsFragment()
         // denna måste med
         detailsFragment.arguments = bundle
         supportFragmentManager.commit {
             addToBackStack("Details")
             replace(R.id.fragmentContainerView, detailsFragment)
-
         }
     }
 }
