@@ -1,19 +1,18 @@
 package com.example.todo.detailsScreen
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.material3.AlertDialog
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.todo.databinding.FragmentDetailsBinding
 import com.example.todo.database.dataClass.TaskJournal
-import com.example.todo.uistateData.Task
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 
@@ -48,9 +47,10 @@ class DetailsFragment : Fragment() {
             parentFragmentManager.popBackStack()
         }
 
-        val id = arguments?.getLong("id")
-        if (id != null) {
-            viewModel.setTaskId(id)
+        val id = arguments?.getLong("id")?: -1 // hämtar id
+        Log.d("FirstFragment", "$id")
+        if (id != -1L) {
+            viewModel.setTaskId(id) // skickar in id till viewModel
         }
 
         // Observera UI State och uppdaterar EditText när det finns uppgiftsdata
@@ -58,41 +58,90 @@ class DetailsFragment : Fragment() {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { uiState ->
                     val task = uiState.task
+                    Log.d("DetailsFragment", "$task")
 
                     if (task != null) {
                         binding.titleInput.setText(task.todoText)
+                        binding.descriptionInput.setText(task.description)
+                        binding.checkBoxDone.isChecked = task.isChecked
+                    }
+                    else{
+                        binding.titleInput.setText("")
+                        binding.descriptionInput.setText("")
+                        binding.checkBoxDone.isChecked = false
                     }
                 }
             }
         }
 
 
-        // Add taskJournal when button Done is clicked
+        // Add taskJournal when button Done is clicked,  uppdatera
         binding.buttonSaveTaskJournal.setOnClickListener {
             val taskTitle = binding.titleInput.text.toString()
             val taskDescription = binding.descriptionInput.text.toString()
             val taskIsChecked = binding.checkBoxDone.isChecked
 
-            viewLifecycleOwner.lifecycleScope.launch {
-                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     viewModel.saveTaskJournal(
                         TaskJournal(
                             taskTitle,
                             taskDescription,
-                            taskIsChecked
+                            taskIsChecked,
+                            id // lade till denna annars uppdateras det inte
                         )
                     )
 
-
-                }
-            }
+            // Check for new TaskJournal
+            println(
+                TaskJournal(
+                    title = taskTitle,
+                    description = taskDescription,
+                    status = taskIsChecked
+                )
+            )
+            parentFragmentManager.popBackStack() // navigate to ListFragment
         }
 
 
         // Button Cancel
         binding.buttonCancel.setOnClickListener {
-            // återställ textfienden
+            // clear the textFields
             binding.titleInput.setText("")
+            binding.descriptionInput.setText("")
+            binding.checkBoxDone.isChecked = false
+        }
+
+
+        // Button Delete TaskJournal and show AlertDialog
+        binding.buttonDelete.setOnClickListener {
+
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("Delete Task")
+            builder.setMessage("Are you sure you want to delete Task")
+
+            builder.setPositiveButton("Delete"){ _, _ ->
+
+                        if (id != null) {
+                            viewModel.deleteTaskJournal(id)
+                            binding.titleInput.setText("")
+                            binding.descriptionInput.setText("")
+                            binding.checkBoxDone.isChecked = false
+                            parentFragmentManager.popBackStack() // Navigate to ListFragment
+
+                        }
+
+                    }
+
+            builder.setNegativeButton("Cancel") { _, _ ->
+                builder.setOnDismissListener { dialog -> dialog.dismiss() }
+
+            }
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
+
+
+
+
+
         }
 
 

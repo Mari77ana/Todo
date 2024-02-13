@@ -8,12 +8,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.R
-import androidx.navigation.fragment.R.*
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.TaskActivity
-import com.example.todo.uistateData.Task
 import com.example.todo.databinding.FragmentFirstBinding
 import com.example.todo.detailsScreen.DetailsFragment
 import kotlinx.coroutines.launch
@@ -52,6 +48,7 @@ class ListFragment : Fragment() {
 
 
         binding.fabAddTask.setOnClickListener {
+            println("Fab pressed")
             //  navigate to write a new TaskJournal
             val bundle = Bundle()
             val detailsFragment = DetailsFragment()

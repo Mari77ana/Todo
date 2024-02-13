@@ -1,8 +1,10 @@
 package com.example.todo.database
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Room
 import com.example.todo.database.dataClass.TaskJournal
+import com.example.todo.uistateData.Task
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -21,6 +23,7 @@ import kotlinx.coroutines.flow.map
 
 // ----------- C O U R U T I N E S ----------
 // F L O W = jobbar asynkront så den inte blockerar huvudtråden, den observerar, kan vara av olika datatyper.
+// Använd Flow med observer!!
 // Den hanterar strömmar a data. Producer skickar data Consumer samlar data.
 // ----- Taking a callback-----suspend & resume
 // Suspend -> ( på pause) När den kallas kan den utföra asynkrona operationer  utan att blockera tråden
@@ -32,7 +35,7 @@ import kotlinx.coroutines.flow.map
 
 // Singleton
 class TaskJournalRepository private constructor(context: Context) {
-
+// Singleton
     companion object {
 
         @Volatile //
@@ -50,12 +53,28 @@ class TaskJournalRepository private constructor(context: Context) {
         context, TaskJournalDatabase::class.java, "task journal"
     ).build()
 
+// -----------------------------
+
+
+
 
     // Here we adding taskJournal to insertTaskJournal() to connect with TaskJournalDao
     suspend fun insertTaskJournal(taskJournal: TaskJournal) {
+        Log.d("TaskJournalRepository", "Inserting task to database: $taskJournal")
         taskJournalDatabase.taskJournalDao().insertTaskJournal(taskJournal)
 
     }
+
+    // Denna ska uppdatera objektet TaskJournal
+    suspend fun updateTaskJournal(taskJournal: TaskJournal) {
+        taskJournalDatabase.taskJournalDao().updateTaskJournal(taskJournal)
+    }
+
+    // Delete Task by Id
+    suspend fun deleteTaskJournal(taskJournal: TaskJournal) {
+        taskJournalDatabase.taskJournalDao().deleteTaskJournal(taskJournal)
+    }
+
 
 
     // måste observera för ändringar -> Flow, returnera TaskJournal i en lista för att sedan visa upp i FirstFragment
@@ -63,13 +82,23 @@ class TaskJournalRepository private constructor(context: Context) {
         return taskJournalDatabase.taskJournalDao().observeAllTaskJournal()
     }
 
-    // funktionen Observerar ID och hämtar ID från databasen
+    // funktionen Observerar bara ID och hämtar ID från databasen,(här behövs ingen Lista)
     fun observeTaskJournalById(taskId: Long): Flow<TaskJournal?> {
-        return taskJournalDatabase.taskJournalDao().getTaskJournalById(taskId).map { it.firstOrNull() }
+        return taskJournalDatabase.taskJournalDao().observeTaskJournalById(taskId).map { it.firstOrNull() }
     }
 
-    // for deleting
-    suspend fun deleteTaskJournal(taskJournal: TaskJournal) {
-        taskJournalDatabase.taskJournalDao().deleteTaskJournal(taskJournal)
+
+    suspend fun getTaskJournalById(id: Long): TaskJournal? {
+        return taskJournalDatabase.taskJournalDao().getTaskJournalById(id).let { it.firstOrNull()  }
     }
+
+
+
+
+
+
+
+
+
+
 }

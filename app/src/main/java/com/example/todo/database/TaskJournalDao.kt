@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.example.todo.database.dataClass.TaskJournal
 import kotlinx.coroutines.flow.Flow
 
@@ -19,8 +20,11 @@ interface TaskJournalDao {
     @Insert() // sending taskJournal to Db
     suspend fun insertTaskJournal(taskJournal: TaskJournal)
 
-    @Delete // Delete taskJournal in Db
-    suspend fun deleteTaskJournal(taskJournal: TaskJournal)
+    @Update() // updates taskJournal to Db
+    suspend fun updateTaskJournal(taskJournal: TaskJournal)
+
+    @Delete() // Delete taskJournal in Db
+    suspend fun deleteTaskJournal(taskJournal: TaskJournal) // taskJournal: TaskJournal
 
 
 
@@ -32,10 +36,18 @@ interface TaskJournalDao {
 
     // Get id from TaskJournal
     @Query("SELECT * FROM task_journal WHERE id = :taskId")
-    fun getTaskJournalById(taskId: Long): Flow<List<TaskJournal>>
+    fun observeTaskJournalById(taskId: Long): Flow<List<TaskJournal>>
 
 
-    // Gör en update query
+
+    @Query("SELECT * FROM task_journal WHERE id = :taskId")
+    suspend fun getTaskJournalById(taskId: Long): List<TaskJournal>
+
+
+
+
+
+
 
 
 

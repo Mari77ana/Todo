@@ -34,10 +34,10 @@ class TaskActivity : AppCompatActivity() {
     // send data task to show up in DetailsFragment
     fun showDetails(task: Task?) {
         val bundle = Bundle() // use bundle to pass data between fragments
-        task?.let { bundle.putLong("id", it.id) }
+         bundle.putLong("id", task?.id ?: -1 )
 
         val detailsFragment = DetailsFragment()
-        // denna måste med
+        // arguments måste med
         detailsFragment.arguments = bundle
         supportFragmentManager.commit {
             addToBackStack("Details")

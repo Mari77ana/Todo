@@ -6,14 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.todo.uistateData.Task
 import com.example.todo.database.dataClass.TaskJournal
 import com.example.todo.database.TaskJournalRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class ListViewModel(context: Context) : ViewModel() {
     private val taskJournalRepository = TaskJournalRepository.getInstance(context)
@@ -29,7 +27,7 @@ class ListViewModel(context: Context) : ViewModel() {
         taskJournalRepository.observeAllTaskJournals().onEach { taskJournals ->
 
             val tasks: List<Task> = taskJournals.map { taskJournal: TaskJournal ->
-                Task(taskJournal.id ?: 0, taskJournal.title, taskJournal.status)
+                Task(taskJournal.id ?: 0, taskJournal.title, taskJournal.description,taskJournal.status)
             }
             _uiState.update { currentTaskState ->
                 currentTaskState.copy(tasks = tasks)

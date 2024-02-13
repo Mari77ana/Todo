@@ -13,5 +13,6 @@
     <string name="done_text">Done</string>
     <string name="cancel_button">cancel</string>
     <string name="button_done_text">Done</string>
+    <string name="button_delete">DELETE</string>
 
 </resources>
