@@ -4,13 +4,16 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.todo.api.FoxRepository
 import com.example.todo.database.TaskJournalRepository
 import com.example.todo.database.dataClass.TaskJournal
 import com.example.todo.uistateData.Task
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class DetailsViewModel(context: Context) : ViewModel() {
@@ -18,12 +21,25 @@ class DetailsViewModel(context: Context) : ViewModel() {
 
     // använd singelton -> TaskJournalRepository.getInstance(context)
     private val taskJournalRepository = TaskJournalRepository.getInstance(context)
+    private val foxRepository = FoxRepository() // control T -> Rename mm
 
     private val _uistate = MutableStateFlow(UiState(null)) // task är null
     val uiState = _uistate.asStateFlow()
 
     // vyn får ett id, skicka in id till vymodellen, vymodellen lyssnar på id och uppdaterar uistate, vyn lyssnar på uistate
 
+
+    // retrofit
+    fun getFox(){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val fox = foxRepository.getFox()
+                println(fox)
+            }
+
+        }
+
+    }
 
 
 

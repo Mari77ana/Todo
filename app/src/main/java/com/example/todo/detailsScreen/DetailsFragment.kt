@@ -40,6 +40,7 @@ class DetailsFragment : Fragment() {
         val view = binding.root
 
         var taskJournal: TaskJournal
+        viewModel.getFox()
 
 
 
@@ -47,7 +48,7 @@ class DetailsFragment : Fragment() {
             parentFragmentManager.popBackStack()
         }
 
-        val id = arguments?.getLong("id")?: -1 // hämtar id
+        val id = arguments?.getLong("id") ?: -1 // hämtar id
         Log.d("FirstFragment", "$id")
         if (id != -1L) {
             viewModel.setTaskId(id) // skickar in id till viewModel
@@ -66,8 +67,7 @@ class DetailsFragment : Fragment() {
                         binding.commentInput.setText(task.comment)
                         binding.checkBoxDone.isChecked = task.isChecked
 
-                    }
-                    else{
+                    } else {
                         binding.titleInput.setText("")
                         binding.descriptionInput.setText("")
                         binding.checkBoxDone.isChecked = false
@@ -84,15 +84,15 @@ class DetailsFragment : Fragment() {
             val taskComment = binding.commentInput.text.toString()
             val taskIsChecked = binding.checkBoxDone.isChecked
 
-                    viewModel.saveTaskJournal(
-                        TaskJournal(
-                            taskTitle,
-                            taskDescription,
-                            taskIsChecked,
-                            taskComment,
-                            id.takeIf { id > -1 } // lade till denna annars uppdateras det inte
-                        )
-                    )
+            viewModel.saveTaskJournal(
+                TaskJournal(
+                    taskTitle,
+                    taskDescription,
+                    taskIsChecked,
+                    taskComment,
+                    id.takeIf { id > -1 } // lade till denna annars uppdateras det inte
+                )
+            )
 
             // Check for new TaskJournal
             println(
@@ -124,19 +124,19 @@ class DetailsFragment : Fragment() {
             builder.setTitle("Delete Task")
             builder.setMessage("Are you sure you want to delete Task")
 
-            builder.setPositiveButton("Delete"){ _, _ ->
+            builder.setPositiveButton("Delete") { _, _ ->
 
-                        if (id != null) {
-                            viewModel.deleteTaskJournal(id)
-                            binding.titleInput.setText("")
-                            binding.descriptionInput.setText("")
-                            binding.commentInput.setText("")
-                            binding.checkBoxDone.isChecked = false
-                            parentFragmentManager.popBackStack() // Navigate to ListFragment
+                if (id != null) {
+                    viewModel.deleteTaskJournal(id)
+                    binding.titleInput.setText("")
+                    binding.descriptionInput.setText("")
+                    binding.commentInput.setText("")
+                    binding.checkBoxDone.isChecked = false
+                    parentFragmentManager.popBackStack() // Navigate to ListFragment
 
-                        }
+                }
 
-                    }
+            }
 
             builder.setNegativeButton("Cancel") { _, _ ->
                 builder.setOnDismissListener { dialog -> dialog.dismiss() }
@@ -144,9 +144,6 @@ class DetailsFragment : Fragment() {
             }
             val dialog: AlertDialog = builder.create()
             dialog.show()
-
-
-
 
 
         }
