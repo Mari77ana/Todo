@@ -26,8 +26,6 @@ interface TaskJournalDao {
     @Delete() // Delete taskJournal in Db
     suspend fun deleteTaskJournal(taskJournal: TaskJournal) // taskJournal: TaskJournal
 
-
-
      // check Flow
     // Get task from TaskJournal   (to use for showing in FirstFragment use a List of TaskJournal)
     @Query("SELECT * FROM task_journal ")
@@ -37,7 +35,6 @@ interface TaskJournalDao {
     // Get id from TaskJournal
     @Query("SELECT * FROM task_journal WHERE id = :taskId")
     fun observeTaskJournalById(taskId: Long): Flow<List<TaskJournal>>
-
 
 
     @Query("SELECT * FROM task_journal WHERE id = :taskId")

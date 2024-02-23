@@ -4,6 +4,9 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
+    //id("androidx.room") // ??
+
+
 
 }
 
@@ -23,6 +26,12 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
+
+
+
     }
 
     buildTypes {
@@ -77,6 +86,14 @@ buildscript {
 
 dependencies {
 
+    // Retrofit
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
+
+
+
+
     // Den nya dependencies för Room
     val room_version = "2.6.1"
 
@@ -98,8 +115,8 @@ dependencies {
     //implementation ("androidx.appcompat:appcompat:1.6.1")
 
     // --- Navigation Fragment
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
    // ----
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")

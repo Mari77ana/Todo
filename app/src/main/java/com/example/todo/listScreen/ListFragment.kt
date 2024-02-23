@@ -45,8 +45,6 @@ class ListFragment : Fragment() {
             }
         )
 
-
-
         binding.fabAddTask.setOnClickListener {
             println("Fab pressed")
             //  navigate to write a new TaskJournal
@@ -70,11 +68,6 @@ class ListFragment : Fragment() {
 
         val recycleView: RecyclerView = binding.recyclerView
         recycleView.adapter = taskAdapter
-
-
-
-
-
 
 
 

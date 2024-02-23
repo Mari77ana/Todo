@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:layout_marginBottom="10dp"
-            android:text="@string/description_title"
+            android:text="@string/description_text"
             android:textColor="@color/black"
             android:textSize="18sp" />
 
@@ -64,6 +64,27 @@
             android:padding="14dp"
             android:hint=""
             android:inputType="text" />
+
+        <TextView
+            android:id="@+id/comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/comment_text"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+
+        <EditText
+            android:id="@+id/comment_input"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@drawable/edit_text"
+            android:padding="14dp"
+            android:hint=""
+            android:inputType="text" />
+
 
         <TextView
             android:id="@+id/status_text"

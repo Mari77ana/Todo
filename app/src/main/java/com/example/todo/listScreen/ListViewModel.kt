@@ -27,7 +27,7 @@ class ListViewModel(context: Context) : ViewModel() {
         taskJournalRepository.observeAllTaskJournals().onEach { taskJournals ->
 
             val tasks: List<Task> = taskJournals.map { taskJournal: TaskJournal ->
-                Task(taskJournal.id ?: 0, taskJournal.title, taskJournal.description,taskJournal.status)
+                Task(taskJournal.id ?: 0, taskJournal.title, taskJournal.description,taskJournal.comment, taskJournal.status)
             }
             _uiState.update { currentTaskState ->
                 currentTaskState.copy(tasks = tasks)
@@ -54,7 +54,7 @@ class ListViewModel(context: Context) : ViewModel() {
         // inserts the task from user / not hard coded
         viewModelScope.launch {
             taskJournalRepository.insertTaskJournal(
-                TaskJournal(item.todoText, "", false)
+                TaskJournal(item.todoText, "", false,"")
             )
         }
     }
@@ -63,7 +63,7 @@ class ListViewModel(context: Context) : ViewModel() {
     fun deleteItem(item: Task) {
         viewModelScope.launch {
             taskJournalRepository.deleteTaskJournal(
-                TaskJournal(item.todoText, "", item.isChecked, item.id)
+                TaskJournal(item.todoText, "", item.isChecked, item.description ,item.id)
             )
         }
     }

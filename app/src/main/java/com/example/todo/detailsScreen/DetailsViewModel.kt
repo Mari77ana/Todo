@@ -65,10 +65,18 @@ class DetailsViewModel(context: Context) : ViewModel() {
         viewModelScope.launch {
 
             taskJournalRepository.observeTaskJournalById(id).filterNotNull().collect { task ->
-            //_uistate.value = UiState(Task(task.id ?: 0L, task.title, task.status))
-                _uistate.value = UiState(Task(task.id ?: -1, task.title, task.description, task.status))
+                //_uistate.value = UiState(Task(task.id ?: 0L, task.title, task.status))
+                _uistate.value = UiState(
+                    Task(
+                        task.id ?: -1,
+                        task.title,
+                        task.description,
+                        task.comment,
+                        task.status
+                    )
+                )
 
-        }
+            }
 
         }
     }

@@ -63,7 +63,9 @@ class DetailsFragment : Fragment() {
                     if (task != null) {
                         binding.titleInput.setText(task.todoText)
                         binding.descriptionInput.setText(task.description)
+                        binding.commentInput.setText(task.comment)
                         binding.checkBoxDone.isChecked = task.isChecked
+
                     }
                     else{
                         binding.titleInput.setText("")
@@ -79,6 +81,7 @@ class DetailsFragment : Fragment() {
         binding.buttonSaveTaskJournal.setOnClickListener {
             val taskTitle = binding.titleInput.text.toString()
             val taskDescription = binding.descriptionInput.text.toString()
+            val taskComment = binding.commentInput.text.toString()
             val taskIsChecked = binding.checkBoxDone.isChecked
 
                     viewModel.saveTaskJournal(
@@ -86,7 +89,8 @@ class DetailsFragment : Fragment() {
                             taskTitle,
                             taskDescription,
                             taskIsChecked,
-                            id // lade till denna annars uppdateras det inte
+                            taskComment,
+                            id.takeIf { id > -1 } // lade till denna annars uppdateras det inte
                         )
                     )
 
@@ -95,6 +99,7 @@ class DetailsFragment : Fragment() {
                 TaskJournal(
                     title = taskTitle,
                     description = taskDescription,
+                    comment = taskComment,
                     status = taskIsChecked
                 )
             )
@@ -107,6 +112,7 @@ class DetailsFragment : Fragment() {
             // clear the textFields
             binding.titleInput.setText("")
             binding.descriptionInput.setText("")
+            binding.commentInput.setText("")
             binding.checkBoxDone.isChecked = false
         }
 
@@ -124,6 +130,7 @@ class DetailsFragment : Fragment() {
                             viewModel.deleteTaskJournal(id)
                             binding.titleInput.setText("")
                             binding.descriptionInput.setText("")
+                            binding.commentInput.setText("")
                             binding.checkBoxDone.isChecked = false
                             parentFragmentManager.popBackStack() // Navigate to ListFragment
 
